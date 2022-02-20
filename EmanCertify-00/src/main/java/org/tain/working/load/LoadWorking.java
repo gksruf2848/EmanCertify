@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LoadWorking {
 
 	public void doing() throws Exception {
-		log.info("KANG-20210405 >>>>> {} {}", CurrentInfo.get());
+		log.info("HANLIM-20220220 >>>>> {} {}", CurrentInfo.get());
 		
 		if (Boolean.TRUE) {
 			if (Boolean.TRUE) loadTblUser();

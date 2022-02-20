@@ -35,6 +35,8 @@ public class UserRestController {
 	@RequestMapping(value = {"/users"}, method = {RequestMethod.GET, RequestMethod.POST})
 	public ResponseEntity<?> test(HttpEntity<String> httpEntity) throws Exception {
 		String reqBody = null;
+		//HANLIM - 20220220
+		/*
 		if (Boolean.TRUE) {
 			HttpHeaders reqHeaders = httpEntity.getHeaders();
 			reqBody = httpEntity.getBody();
@@ -47,10 +49,10 @@ public class UserRestController {
 			if (reqBody == null)
 				reqBody = "{}";
 		}
-		
+		*/
 		List<Map<String,Object>> lst = null;
 		if (Boolean.TRUE) {
-			Map<String, Object> mapIn = new ObjectMapper().readValue(reqBody, new TypeReference<Map<String, Object>>() {});
+			Map<String, Object> mapIn = null; //new ObjectMapper().readValue(reqBody, new TypeReference<Map<String, Object>>() {});
 			lst = this.userMapper.selectAll(mapIn);
 			log.info(">>>>> lst: {}", lst);
 		}
