@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>test01.html</title>
-	<!-- download: http://jquery.com/download -->
+	<title>login.html</title>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script>
 	
@@ -25,7 +24,6 @@
 		}
 		return obj;
 	};
-	
 	// script loader
 	$(function() {
 		// https://api.jquery.com/jquery.ajax/
@@ -42,27 +40,40 @@
 		$('#btnAction1').on('click', function(event){
 			console.log('btnAction1');
 			$.ajax({
-				url: "/v0.1/rest/users",
+				url: "/v0.1/user/logincheck",
 				method: "POST",
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify({user: 'gksruf2848', val: '123'}),
 				dataType: "json",
 				beforeSend: function() {
+					//alert('BEFORE');
 					var obj1 = {};
-					obj1.user = $('#userid').val();
-					obj1.val = '123';
-					this.data = JSON.stringify(obj1);
+					this.data = JSON.stringify($("form").serializeObject());
 					console.log('beforeSend... data: ' + this.data);
+					//this.data = JSON.stringify(this.data);
+					//console.log('beforeSend... data: ' + this.data);
 				}
 			})
 			.done(function(json) {
-				console.log('done.json: ' + JSON.stringify(json));
-				$('#out1').val(JSON.stringify(json));
+				console.log('done.json: ' + json.msg);
+				//alert('STOP');
+				if (json.msg == "success") {
+					//alert('SUCCESS');
+					location.href = "/v0.1/user/loginsuccess";
+				} else {
+					//alert('FAIL');
+					location.href = "/v0.1/user/loginfail";
+				}
+				//alert('SUCCESS');
+				//location.href = "/v0.1/user/loginsuccess"
+
+				//$('#out1').val(JSON.stringify(json));
 			})
 			.fail(function(xhr, status, errorThrown) {
 				alert('ERROR');
-				console.log('fail.errmsg: ' + errorThrown)
-				console.log('fail.status: ' + status)
+				location.href = "/v0.1/user/loginfail"
+				//console.log('fail.errmsg: ' + errorThrown)
+				//console.log('fail.status: ' + status)
 			})
 			.always(function(xhr, status) {
 				console.log('always.status: ' + status)
@@ -73,14 +84,13 @@
 </head>
 <body>
 	<h1>Main</h1>
-	<input id='in1' type='text' value='user'><br>
-	<input id='out1' type='password' value=''><br>
+	<form>
+	<input id='userid' type='text' name='user' value=''><br>
+	<input id='password' type='password' name='pw' value=''><br>
 	<button id="btnAction1">LOGIN</button>
-	<p th:text="${loginMessage}" style="color: red"></p>
+	</form>
 	<br>
-	
 </body>
 </html>
 
-1.기본 가장 관심사는 컨트롤러
-2.JPA에서 
+

@@ -1,17 +1,10 @@
 package org.tain.controller.rest;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,19 +17,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping(value = {"/user"})
 @Slf4j
 public class UserRestController {
 
 	@Autowired
 	private UserMapper userMapper;
-	
-	@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST}, maxAge = 3600)
-	@RequestMapping(value = {"/users"}, method = {RequestMethod.GET, RequestMethod.POST})
-	public ResponseEntity<?> test(HttpEntity<String> httpEntity) throws Exception {
+		
+	@RequestMapping(value = {"/user/logincheck"}, method = {RequestMethod.GET, RequestMethod.POST})
+	public String userlogin(HttpEntity<String> httpEntity) throws Exception {
 		String reqBody = null;
-		//HANLIM - 20220220
-		/*
 		if (Boolean.TRUE) {
 			HttpHeaders reqHeaders = httpEntity.getHeaders();
 			reqBody = httpEntity.getBody();
@@ -49,23 +38,24 @@ public class UserRestController {
 			if (reqBody == null)
 				reqBody = "{}";
 		}
-		*/
-		List<Map<String,Object>> lst = null;
-		if (Boolean.TRUE) {
-			Map<String, Object> mapIn = null; //new ObjectMapper().readValue(reqBody, new TypeReference<Map<String, Object>>() {});
-			lst = this.userMapper.selectAll(mapIn);
-			log.info(">>>>> lst: {}", lst);
-		}
 		
-		// response
-		MultiValueMap<String,String> headers = null;
+		Map<String,Object> mapOut = null;
+		Map<String,Object> mapIn = null;
 		if (Boolean.TRUE) {
-			headers = new LinkedMultiValueMap<>();
-			headers.add(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
+			mapIn = new ObjectMapper().readValue(reqBody, new TypeReference<Map<String, Object>>() {});
+			mapOut = this.userMapper.selectOne(mapIn);
+			log.info(">>>>> mapOut: {}", mapOut);
 		}
-		
-		Map<String, Object> mapOut = new HashMap<>();
-		mapOut.put("list", lst);
-		return new ResponseEntity<>(mapOut, headers, HttpStatus.OK);
+		if(mapOut != null) {
+			String pwIn = (String)mapIn.get("pw");
+			String pwOut = (String)mapOut.get("pw");
+			if(pwIn.equals(pwOut)) {
+				System.out.println("----> success");
+				return "{\"msg\":\"success\"}";
+			}
+		}
+		System.out.println("----> FAIL");
+		return "{\"msg\":\"fail\"}";
 	}
 }
+

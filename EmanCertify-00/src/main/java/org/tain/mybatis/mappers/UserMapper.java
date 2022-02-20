@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
 
 	List<Map<String,Object>> selectAll(Map<String,Object> mapIn);
+	Map<String,Object> selectOne(Map<String,Object> mapIn);
+
 }

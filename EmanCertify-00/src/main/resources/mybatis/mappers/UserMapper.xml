@@ -25,4 +25,15 @@
 		-->
 	</select>
 
+	<select id="selectOne" parameterType="CamelMap" resultType="CamelMap">
+			select distinct
+				id
+				, user
+				, pw
+			from
+				tbl_user
+			where 1=1
+				and user = #{user}
+
+	</select>
 </mapper>
